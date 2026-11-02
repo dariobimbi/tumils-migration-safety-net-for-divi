@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" role="img" aria-label="Migration Safety Net">
+  <!-- Divi Marketplace SVG icon spec: 16x16, no bitmap data, #2b87da only, 2px
+       strokes for line work. The full badge (double ring, compass diamonds, the
+       1:1 traced plug) is illegible at 16px, so this is the mark reduced to the
+       two features that still read: the plug and the lightning-rune cord. -->
+  <g fill="#2b87da">
+    <rect x="4.5" y="0.5" width="2" height="3"/>
+    <rect x="9.5" y="0.5" width="2" height="3"/>
+    <path d="M3,4 H13 V7.5 L10.75,9.75 H5.25 L3,7.5 Z"/>
+    <!-- The cord is a filled bolt, not a stroked zigzag: at this size a 2px
+         stroke on segments this short merges into a solid blob. -->
+    <polygon points="8.9,9.75 5.1,12.9 7.5,12.9 6.7,15.6 10.9,12.1 8.4,12.1"/>
+  </g>
+</svg>

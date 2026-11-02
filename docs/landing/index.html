@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tumil's Migration Safety Net for Divi 5 — prove your migration didn't break anything</title>
+<meta name="description" content="Snapshot every page before you migrate to Divi 5, re-scan after, and see exactly what changed — or prove nothing did. A noise-filtered DOM diff that runs entirely on your own server.">
+<link rel="canonical" href="https://plugins.dariobimbi.com/migration-safety-net-for-divi/">
+<meta property="og:title" content="Tumil's Migration Safety Net for Divi 5">
+<meta property="og:description" content="Snapshot every page before you migrate to Divi 5, re-scan after, and see exactly what changed — or prove nothing did.">
+<meta property="og:image" content="https://plugins.dariobimbi.com/migration-safety-net-for-divi/featured.jpg">
+<meta property="og:type" content="product">
+<link rel="icon" href="icon.png" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bone: #EFE8DA;
+    --paper: #F7F3EA;
+    --ink: #26313A;
+    --ink-soft: #55636d;
+    --falu: #A8402F;
+    --teal: #3E7C76;
+    --line: #d9d0be;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 18px/1.6 'Zilla Slab', Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--falu); }
+
+  /* ---- hero ---- */
+  header.hero { background: var(--bone); border-bottom: 1px solid var(--line); padding: 56px 0 48px; }
+  .hero-grid { display: flex; gap: 40px; align-items: center; }
+  .hero-mark { flex: none; }
+  .brand {
+    font-family: 'Cinzel', serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.32em; color: var(--falu); display: flex; align-items: center; margin-bottom: 14px;
+  }
+  .diamond { width: 6px; height: 6px; background: var(--falu); transform: rotate(45deg); display: inline-block; margin-right: 12px; flex: none; }
+  h1 { font-size: 46px; line-height: 1.08; margin: 0 0 6px; font-weight: 700; letter-spacing: -0.01em; }
+  h1 .for { color: var(--falu); display: block; font-size: 30px; margin-top: 6px; }
+  .lede { font-size: 21px; color: var(--ink-soft); margin: 18px 0 0; max-width: 46ch; }
+  .cta-row { margin-top: 28px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    display: inline-block; padding: 13px 26px; border-radius: 3px; text-decoration: none;
+    font-weight: 600; font-size: 17px; border: 2px solid var(--falu);
+  }
+  .btn-primary { background: var(--falu); color: #fff; }
+  .btn-ghost { background: transparent; color: var(--falu); }
+  .price-note { font-size: 15px; color: var(--ink-soft); }
+
+  /* ---- sections ---- */
+  section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: 0; }
+  h2 { font-size: 30px; margin: 0 0 10px; font-weight: 700; }
+  h2 + .sub { color: var(--ink-soft); margin: 0 0 30px; max-width: 62ch; }
+  h3 { font-size: 20px; margin: 0 0 6px; font-weight: 600; }
+
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 0; padding: 0; list-style: none; counter-reset: s; }
+  .steps li { background: #fff; border: 1px solid var(--line); border-radius: 4px; padding: 20px; }
+  .steps li::before {
+    counter-increment: s; content: counter(s);
+    font-family: 'Cinzel', serif; font-weight: 700; color: var(--falu);
+    display: block; font-size: 15px; margin-bottom: 8px; letter-spacing: 0.1em;
+  }
+  .steps p { margin: 0; font-size: 16px; color: var(--ink-soft); }
+
+  /* ---- shot viewer ---- */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
+  .tab {
+    font: 600 16px/1 'Zilla Slab', Georgia, serif; cursor: pointer;
+    background: transparent; border: 1px solid var(--line); border-bottom: none;
+    padding: 12px 18px; border-radius: 4px 4px 0 0; color: var(--ink-soft);
+  }
+  .tab[aria-selected="true"] { background: #fff; color: var(--ink); border-color: var(--line); position: relative; top: 1px; }
+  .shot-stage { background: #fff; border: 1px solid var(--line); border-radius: 0 4px 4px 4px; padding: 14px; }
+  .shot-stage img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 2px; }
+  .shot-caption { margin: 14px 2px 0; font-size: 16px; color: var(--ink-soft); }
+  [hidden] { display: none !important; }
+
+  /* ---- verdict callout ---- */
+  .verdict {
+    background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--teal);
+    border-radius: 4px; padding: 26px 28px; margin: 0 0 26px;
+  }
+  .verdict strong { color: var(--teal); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+  .plain { margin: 0; padding-left: 20px; color: var(--ink-soft); }
+  .plain li { margin-bottom: 8px; }
+  .plain li strong { color: var(--ink); }
+
+  dl.specs { display: grid; grid-template-columns: max-content 1fr; gap: 8px 22px; margin: 0; font-size: 17px; }
+  dl.specs dt { font-weight: 600; }
+  dl.specs dd { margin: 0; color: var(--ink-soft); }
+
+  footer { background: var(--bone); padding: 34px 0; font-size: 16px; color: var(--ink-soft); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 860px) {
+    body { font-size: 17px; }
+    .hero-grid { flex-direction: column; align-items: flex-start; gap: 24px; }
+    h1 { font-size: 34px; }
+    h1 .for { font-size: 23px; }
+    .lede { font-size: 19px; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .two-col { grid-template-columns: 1fr; gap: 26px; }
+    section { padding: 40px 0; }
+  }
+  @media (max-width: 520px) {
+    .steps { grid-template-columns: 1fr; }
+    .tab { padding: 10px 13px; font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-mark" aria-hidden="true">
+      <svg width="150" height="150" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="128" cy="128" r="104" fill="none" stroke="#26313A" stroke-width="3"/>
+        <circle cx="128" cy="128" r="96" fill="none" stroke="#26313A" stroke-width="3"/>
+        <rect x="121.5" y="17.5" width="13" height="13" fill="#A8402F" transform="rotate(45 128 24)"/>
+        <rect x="121.5" y="225.5" width="13" height="13" fill="#A8402F" transform="rotate(45 128 232)"/>
+        <rect x="17.5" y="121.5" width="13" height="13" fill="#A8402F" transform="rotate(45 24 128)"/>
+        <rect x="225.5" y="121.5" width="13" height="13" fill="#A8402F" transform="rotate(45 232 128)"/>
+        <g transform="translate(99.95,60.85) scale(0.85)">
+          <rect x="13" y="0" width="8" height="31" fill="#26313A"/>
+          <rect x="45" y="0" width="8" height="31" fill="#26313A"/>
+          <path d="M0,31 H66 V66 L50,81 H16 L0,66 Z" fill="#A8402F"/>
+          <rect x="24" y="81" width="18" height="10" fill="#26313A"/>
+          <rect x="29" y="91" width="8" height="9" fill="#26313A"/>
+          <polygon points="29,99 37,99 37,104 22,115 62,128.5 37,147 37,158 29,158 29,143 45,131 4,117" fill="#26313A"/>
+        </g>
+      </svg>
+    </div>
+    <div>
+      <div class="brand"><span class="diamond"></span>TUMIL&rsquo;S PLUGINS</div>
+      <h1>Migration Safety Net<span class="for">for Divi&nbsp;5</span></h1>
+      <p class="lede">Snapshot every page before you migrate. Re-scan after. See exactly what changed &mdash; or prove nothing did.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#report">See the report</a>
+        <a class="btn btn-ghost" href="https://www.elegantthemes.com/marketplace/">Divi Marketplace</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="verdict">
+      Divi&nbsp;5&rsquo;s built-in migrator predicts what <em>will</em> convert. This proves what <em>did</em> &mdash; and when nothing broke, it says so in as many words: <strong>Migration verified clean.</strong>
+    </div>
+    <h2>How it works</h2>
+    <p class="sub">Four steps, entirely inside your WordPress admin. No account, no external service, nothing to configure.</p>
+    <ol class="steps">
+      <li><h3>Snapshot</h3><p>Capture how every published page actually renders, before you touch anything.</p></li>
+      <li><h3>Migrate</h3><p>Run Divi&rsquo;s migrator, update the theme, change whatever you meant to change.</p></li>
+      <li><h3>Re-scan</h3><p>Take a second snapshot of the same pages.</p></li>
+      <li><h3>Compare</h3><p>A noise-filtered DOM diff of every page, ranked by severity.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="report">
+  <div class="wrap">
+    <h2>The report</h2>
+    <p class="sub">These are unretouched screenshots from a real Divi 4.27 &rarr; 5.2 migration of a nine-page site &mdash; not mockups. Click through the four screens the plugin actually produces.</p>
+
+    <div class="tabs" role="tablist" aria-label="Report screens">
+      <button class="tab" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true">Clean verdict</button>
+      <button class="tab" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false">Changed pages</button>
+      <button class="tab" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false">Drill-down</button>
+      <button class="tab" role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false">Snapshots</button>
+    </div>
+
+    <!-- Deliberately not loading="lazy": hidden panels defer the fetch until the
+         tab is clicked, so every switch flashed a broken-image box first. 275KB
+         of PNG total, and these four shots ARE the page. -->
+    <div class="shot-stage">
+      <div role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+        <img src="screenshot-1.png" alt="The plugin reporting Migration verified clean, all nine pages rendering identically." width="1280" height="800">
+        <p class="shot-caption">A clean result is a first-class outcome. When every page still renders identically, you get a plain statement of it &mdash; the answer you actually wanted.</p>
+      </div>
+      <div role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
+        <img src="screenshot-2.png" alt="The report listing changed pages ranked by severity, with clean pages confirmed below." width="1280" height="800">
+        <p class="shot-caption">Changed pages sort to the top, split into structural and cosmetic counts. Clean pages are listed too, so you can see the whole site was checked.</p>
+      </div>
+      <div role="tabpanel" id="panel-3" aria-labelledby="tab-3" hidden>
+        <img src="screenshot-3.png" alt="Per-page drill-down showing each change classified as structural or cosmetic with before and after markup." width="1280" height="800">
+        <p class="shot-caption">Every change on a page, classified and labelled, with the before and after markup side by side so you can judge it in seconds.</p>
+      </div>
+      <div role="tabpanel" id="panel-4" aria-labelledby="tab-4" hidden>
+        <img src="screenshot-4.png" alt="The snapshots screen with capture and compare controls." width="1280" height="800">
+        <p class="shot-caption">Label a snapshot, take it, compare any two. Snapshots stay on your own server and can be deleted from this screen at any time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two-col">
+    <div>
+      <h2>Why the diff is trustworthy</h2>
+      <p class="sub" style="margin-bottom:18px">Divi&nbsp;5 rewrites a great deal of markup that changes nothing visually. Every one of those patterns is normalised away before comparison:</p>
+      <ul class="plain">
+        <li><strong>Marker classes</strong> Divi&nbsp;5 adds almost everywhere, with no visual effect.</li>
+        <li><strong>Gutter and alignment classes</strong> it quietly drops.</li>
+        <li><strong>Plain spans</strong> it unwraps, and <strong>wrapper divs</strong> it consolidates.</li>
+        <li><strong>Cache busters</strong> and attribute order, which change on every request.</li>
+      </ul>
+      <p style="color:var(--ink-soft);font-size:16px">Each rule was forced by a real migration, never guessed at, and the whole engine ships with 102 automated tests. False positives are what make a verification tool worthless, so that is where the work went.</p>
+    </div>
+    <div>
+      <h2>Honest about its limits</h2>
+      <p class="sub" style="margin-bottom:18px">This measures rendered HTML, not painted pixels.</p>
+      <ul class="plain">
+        <li>A change that exists <strong>only in generated CSS</strong> &mdash; a background colour in a <code>&lt;style&gt;</code> block, say &mdash; is invisible to a markup diff.</li>
+        <li>It compares <strong>published, publicly reachable pages</strong>; anything behind a login is out of scope.</li>
+        <li>A page whose stored snapshot has gone missing is reported <strong>&ldquo;Cannot verify&rdquo;</strong> &mdash; never quietly counted as clean.</li>
+      </ul>
+      <p style="color:var(--ink-soft);font-size:16px">Said plainly here because a verification tool that overstates its coverage is worse than no tool at all.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Requirements</h2>
+    <p class="sub">Built for ordinary shared hosting. Page capture uses WordPress&rsquo;s own loopback request &mdash; no headless browser, no API key, nothing about your site leaves your server.</p>
+    <dl class="specs">
+      <dt>WordPress</dt><dd>6.2 or newer</dd>
+      <dt>PHP</dt><dd>7.4 or newer, through the current stable release</dd>
+      <dt>Divi</dt><dd>Works alongside Divi 4 and Divi 5 &mdash; install it before you migrate</dd>
+      <dt>Pages covered</dt><dd>Published pages, posts and custom post types (200 by default, filterable), plus the front page and a sample of each archive</dd>
+      <dt>Storage</dt><dd>Snapshots live in your uploads folder; uninstalling removes every trace</dd>
+      <dt>External requests</dt><dd>None</dd>
+      <dt>Licence</dt><dd>GPLv2 or later</dd>
+    </dl>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Tumil&rsquo;s Plugins &mdash; built by <a href="https://dariobimbi.com/">Dario Bimbi</a></span>
+    <span>Support: <a href="mailto:tumilssupport@gmail.com">tumilssupport@gmail.com</a></span>
+  </div>
+</footer>
+
+<script>
+  // Tabbed screenshots, with real keyboard support: the panels are the demo, so
+  // they should not require a mouse. No dependencies on purpose — this page has
+  // to keep working unattended for years on plain shared hosting.
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    // moveFocus only on keyboard navigation: calling focus() after a mouse click
+    // scrolls the tab back into view, which yanks the page under the pointer.
+    function show(i, moveFocus) {
+      tabs.forEach(function (t, j) {
+        t.setAttribute('aria-selected', j === i ? 'true' : 'false');
+        document.getElementById('panel-' + (j + 1)).hidden = j !== i;
+      });
+      if (moveFocus) { tabs[i].focus(); }
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { show(i, false); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); show((i + 1) % tabs.length, true); }
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); show((i - 1 + tabs.length) % tabs.length, true); }
+        if (e.key === 'Home') { e.preventDefault(); show(0, true); }
+        if (e.key === 'End') { e.preventDefault(); show(tabs.length - 1, true); }
+      });
+    });
+  }());
+</script>
+
+</body>
+</html>

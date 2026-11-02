@@ -1,0 +1,84 @@
+/* Migration Safety Net admin styles — hand-written, no build step. */
+.tumils-msn-wrap .tumils-msn-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 16px 20px;
+	margin: 16px 0;
+	max-width: 900px;
+}
+.tumils-msn-wrap .tumils-msn-vs { margin: 0 8px; }
+.tumils-msn-progress {
+	margin-top: 12px;
+	background: #f0f0f1;
+	border-radius: 3px;
+	height: 22px;
+	position: relative;
+	overflow: hidden;
+}
+.tumils-msn-progress-bar {
+	background: #2271b1;
+	height: 100%;
+	width: 0;
+	transition: width 0.3s;
+}
+.tumils-msn-progress-text {
+	position: absolute;
+	inset: 0;
+	text-align: center;
+	line-height: 22px;
+	font-size: 12px;
+}
+.tumils-msn-badge {
+	display: inline-block;
+	padding: 1px 8px;
+	border-radius: 10px;
+	font-size: 11px;
+	font-weight: 600;
+}
+.tumils-msn-badge-structural { background: #fcf0f1; color: #d63638; }
+.tumils-msn-badge-cosmetic { background: #fcf9e8; color: #996800; }
+.tumils-msn-badge-clean { background: #edfaef; color: #007a2f; }
+/* Needs .tumils-msn-wrap to outweigh `.tumils-msn-wrap .tumils-msn-card`, which
+   sets padding on this same element: at 0-1-0 the hero's own padding never
+   applied, so the product's payoff screen rendered as a cramped strip with the
+   check glyph crowding the sentence. */
+.tumils-msn-wrap .tumils-msn-clean-hero {
+	text-align: center;
+	padding: 48px 24px;
+	font-size: 18px;
+}
+/* line-height must be set explicitly: wp-admin declares it in em, which computes
+   to a length on the parent and inherits as that length — so this 48px glyph got
+   a 18.2px line box and painted over the sentence below it. */
+.tumils-msn-wrap .tumils-msn-clean-hero .tumils-msn-clean-mark { font-size: 48px; line-height: 1; display: block; margin-bottom: 12px; color: #00a32a; }
+.tumils-msn-hunk {
+	border: 1px solid #c3c4c7;
+	border-left-width: 4px;
+	border-radius: 3px;
+	margin: 12px 0;
+	padding: 10px 14px;
+	overflow-x: auto;
+}
+.tumils-msn-hunk-structural { border-left-color: #d63638; }
+.tumils-msn-hunk-cosmetic { border-left-color: #dba617; }
+.tumils-msn-hunk pre {
+	margin: 6px 0;
+	padding: 8px;
+	background: #f6f7f7;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+.tumils-msn-hunk .tumils-msn-before { background: #fcf0f1; }
+.tumils-msn-hunk .tumils-msn-after { background: #edfaef; }
+.tumils-msn-path { font-family: monospace; font-size: 12px; color: #646970; word-break: break-all; }
+/* Prose-only hunks (a gap report rather than a markup change) print a sentence
+   instead of the before/after <pre> pair. */
+.tumils-msn-hunk .tumils-msn-note { margin: 6px 0 0; color: #50575e; }
+
+@media (max-width: 980px) {
+	.tumils-msn-wrap .tumils-msn-card { padding: 12px; }
+	.tumils-msn-wrap .tumils-msn-clean-hero { padding: 32px 16px; }
+	.tumils-msn-wrap select, .tumils-msn-wrap input[type="text"] { max-width: 100%; width: 100%; margin-bottom: 8px; display: block; }
+	.tumils-msn-wrap .tumils-msn-vs { display: block; margin: 4px 0; }
+}

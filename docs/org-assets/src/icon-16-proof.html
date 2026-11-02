@@ -1,0 +1,16 @@
+<style>
+  html, body { margin: 0; padding: 0; background: #fff; }
+  .sheet { display: flex; align-items: flex-end; gap: 40px; padding: 40px; font: 12px/1.4 system-ui, sans-serif; color: #555; }
+  .cell { text-align: center; }
+  .cell img { display: block; margin: 0 auto 8px; image-rendering: auto; }
+  .dark { background: #26313A; padding: 12px; }
+</style>
+<!-- Proof sheet: the 16x16 marketplace icon at true size, at the sizes ET's UI
+     might scale it to, and on dark chrome. Rendered, not eyeballed in the source. -->
+<div class="sheet">
+  <div class="cell"><img src="../icon-16.svg" width="16" height="16">16px (true size)</div>
+  <div class="cell"><img src="../icon-16.svg" width="32" height="32">32px</div>
+  <div class="cell"><img src="../icon-16.svg" width="64" height="64">64px</div>
+  <div class="cell"><img src="../icon-16.svg" width="128" height="128">128px</div>
+  <div class="cell dark"><img src="../icon-16.svg" width="32" height="32">on dark</div>
+</div>

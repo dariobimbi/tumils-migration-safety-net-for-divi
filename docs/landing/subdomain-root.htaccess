@@ -1,0 +1,9 @@
+# Goes at the ROOT of the plugins.dariobimbi.com document root — one level ABOVE
+# migration-safety-net-for-divi/. Without it, the bare subdomain shows either an
+# Apache directory listing or a 403, both of which look broken to anyone who
+# trims the URL to check the domain.
+#
+# 302 rather than 301: temporary on purpose, so it stops cleanly once there is a
+# real index page listing more than one plugin.
+Options -Indexes
+RedirectMatch 302 ^/$ /migration-safety-net-for-divi/
